@@ -1,0 +1,26 @@
+{
+    "name": "customer-support",
+    "version": "1.0.0",
+    "description": "tensor go internship task",
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon app.js --experimental-sqlite",
+        "start": "node app.js --experimental-sqlite"
+    },
+    "devDependencies": {
+        "dotenv": "^16.4.7",
+        "nodemon": "^3.1.9"
+    },
+    "dependencies": {
+        "cookie-parser": "^1.4.7",
+        "crypto": "^1.0.1",
+        "customer-support": "file:",
+        "express": "^4.21.2",
+        "intercom-client": "^6.0.0",
+        "jsonwebtoken": "^9.0.2"
+    }
+}

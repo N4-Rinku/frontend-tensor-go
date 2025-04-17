@@ -2,6 +2,8 @@ import { Router } from "express";
 import { intercom } from "../controllers/intercom.js";
 import intercomConstants from "../constants/intercom.js";
 import string from "../utils/string.js";
+import axios from "axios";
+
 
 const router = Router();
 
@@ -42,6 +44,12 @@ router.post("/", async (req, res) => {
       body,
       interaction
     );
+    await axios.post("https://hooks.zapier.com/hooks/catch/22550620/2xurezu/", {
+  userId: req.user?.id,
+  intercomContactId: req.user?.intercomContactId,
+  interaction: interaction,
+  timestamp: new Date().toISOString()
+});
 
     res
       .status(200)

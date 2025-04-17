@@ -6,12 +6,15 @@ const App = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const [textareaValue, setTextareaValue] = useState("");
   const [requests, setRequests] = useState([]);
+  const [billing, setBilling] = useState(null);
 
   useEffect(() => {
     fetch("/home")
       .then((res) => res.json())
       .then(setUser);
+
     handleRefresh();
+    fetchBilling();
 
     return () => {};
   }, []);
@@ -29,6 +32,16 @@ const App = () => {
 
         setRequests(conversationslist);
       });
+  };
+
+  const fetchBilling = async () => {
+    try {
+      const res = await fetch("/api/billing-info");
+      const data = await res.json();
+      setBilling(data);
+    } catch (error) {
+      console.error("Failed to fetch billing info", error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -55,6 +68,7 @@ const App = () => {
         setSelectedOption("");
         setTextareaValue("");
         setMessage("Sent successfully");
+        fetchBilling();
       } else {
         console.error("Error:", response.statusText);
         setMessage("Couldn't send message, please try again.");
@@ -72,6 +86,20 @@ const App = () => {
         <p className="text-lg">Name: {user.name ?? "Loading..."}</p>
         <p className="text-lg">Email: {user.email ?? "Loading..."}</p>
       </header>
+
+      {/* Billing Info */}
+      <section className="w-full max-w-2xl bg-white p-4 rounded-lg shadow-md mb-6">
+        <h2 className="text-lg font-semibold mb-2">Billing Info</h2>
+        {billing ? (
+          <div className="text-gray-800">
+            <p><strong>Usage:</strong> {billing.usage ?? 0} requests</p>
+            <p><strong>Plan:</strong> {billing.plan ?? "Free"}</p>
+            <p><strong>Last Interaction:</strong> {billing.lastInteraction ? new Date(billing.lastInteraction).toLocaleString() : "N/A"}</p>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">Loading billing data...</p>
+        )}
+      </section>
 
       {/* Form Section */}
       <section className="w-full max-w-2xl bg-white p-6 rounded-lg shadow-md mb-8">
@@ -166,3 +194,4 @@ const App = () => {
 };
 
 export default App;
+
